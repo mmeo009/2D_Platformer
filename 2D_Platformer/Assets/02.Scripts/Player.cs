@@ -28,27 +28,40 @@ public class Player : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            moveSpeed = 15;
-            anim.SetBool("dash", true);
-        }
-        else
-        {
-            moveSpeed = 5;
-            anim.SetBool("dash", false);
-        }
 
+        // 플레이어 이동
 
         rb.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), rb.velocity.y);
 
         if (Physics2D.Raycast(transform.position, Vector2.down,1.38f,groundCheck)&& Input.GetKeyDown(KeyCode.Space))
         {
             rb.AddForce(Vector2.up*jumpForce, ForceMode2D.Impulse);
+            anim.SetBool("Jump", true);
         }
+
+        // 땅판정 확인선 그리기
+
+        Debug.DrawRay(transform.position, Vector2.down * 1.38f);
+
+        // 플레이어가 떨어지는 중인가?
+
+        if (rb.velocity.y >= 0)
+        {
+            anim.SetBool("Fall", false);
+        }
+
+        else
+
+        {
+            anim.SetBool("Jump", false);
+            anim.SetBool("Fall", true);
+        }
+
+        // 플레이어 공격
 
         if (Input.GetKey(KeyCode.C))
         {
+
             if (Physics2D.Raycast(transform.position, Vector2.right, 2, monsterLayer)&& isPlayerWatchingRight)
                 // Raycast(시작점, 방향, 거리, 검출할 레이어)
             {
@@ -60,6 +73,8 @@ public class Player : MonoBehaviour
                 Debug.DrawRay(transform.position, Vector2.left * 2, Color.red);
             }
         }
+
+        // 플레이어 시점 변환
 
         if (Input.GetAxis("Horizontal") > 0)
             // 축이 양수 일때 (오른쪽을 바라보고 있을때)
@@ -74,6 +89,19 @@ public class Player : MonoBehaviour
             isPlayerWatchingRight = false;
             IMG.flipX = true;
         }
-        Debug.DrawRay(transform.position, Vector2.down * 1.38f);
+
+        // 플레이어가 걷는 중인가?
+        // Mathf.Abs = 절댓값
+
+        anim.SetFloat("walkingSpeed", Mathf.Abs(Input.GetAxis("Horizontal")));
+
+        if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0)
+        {
+            anim.SetBool("walkingStart", true);
+        }
+        else
+        {
+            anim.SetBool("walkingStart", false);
+        }
     }
 }
