@@ -182,6 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: babe3ab1b75755144b6b9b711ddd2149, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  anim: {fileID: 0}
+  moveSpeed: 10
   jumpForce: 10
   groundCheck:
     serializedVersion: 2
@@ -289,7 +291,7 @@ Animator:
   m_GameObject: {fileID: 134956751}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 17889d8c3f3e4bb4db8b7a8e700ffc18, type: 2}
+  m_Controller: {fileID: 9100000, guid: 312496b25d842af4a938e96c7d5aaee0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
