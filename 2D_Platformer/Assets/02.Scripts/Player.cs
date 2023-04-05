@@ -6,22 +6,28 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
-    Rigidbody2D rb;
-    RaycastHit2D hit;
-    public Animator anim;
-    public float moveSpeed = 5;
-    public float jumpForce;
-    public LayerMask groundCheck;
+    private Rigidbody2D rb;
+    private SpriteRenderer sr;
+    private Animator anim;
+    public AnimationClip AtkAnim;
+
+    public float MoveSpeed = 5;
+    public float jumpForce = 8;
+
+    public bool attackAble = true;
+
+    public short plrHead = 1;
+
+    public LayerMask isGround;
     public LayerMask monsterLayer;
-    public bool isPlayerWatchingRight;
-    public SpriteRenderer IMG;
+
 
 
     void Start()
     {
 
         rb = GetComponent<Rigidbody2D>();
-        IMG = GetComponent<SpriteRenderer>();
+        sr = GetComponent<SpriteRenderer>();
         anim = GetComponent<Animator>();
     }
 
@@ -29,79 +35,75 @@ public class Player : MonoBehaviour
     void Update()
     {
 
-        // 플레이어 이동
-
-        rb.velocity = new Vector2(moveSpeed * Input.GetAxis("Horizontal"), rb.velocity.y);
-
-        if (Physics2D.Raycast(transform.position, Vector2.down,1.38f,groundCheck)&& Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.C) && attackAble)
         {
-            rb.AddForce(Vector2.up*jumpForce, ForceMode2D.Impulse);
-            anim.SetBool("Jump", true);
+            attackAble = false;
+            rb.velocity = Vector3.zero;
+            StartCoroutine(AtackTimer());
         }
 
-        // 땅판정 확인선 그리기
-
-        Debug.DrawRay(transform.position, Vector2.down * 1.38f);
-
-        // 플레이어가 떨어지는 중인가?
-
-        if (rb.velocity.y >= 0)
+        if (!attackAble)
         {
-            anim.SetBool("Fall", false);
+            anim.SetBool("Run", false);
+            anim.SetBool("Sliding", false);
         }
 
-        else
-
+        if (attackAble)
         {
-            anim.SetBool("Jump", false);
-            anim.SetBool("Fall", true);
-        }
-
-        // 플레이어 공격
-
-        if (Input.GetKey(KeyCode.C))
-        {
-
-            if (Physics2D.Raycast(transform.position, Vector2.right, 2, monsterLayer)&& isPlayerWatchingRight)
-                // Raycast(시작점, 방향, 거리, 검출할 레이어)
+            rb.velocity = new Vector2(Input.GetAxis("Horizontal") * MoveSpeed, rb.velocity.y);
+            if (rb.velocity.x != 0)
             {
-                Debug.DrawRay(transform.position, Vector2.right * 2, Color.red);
+                if (rb.velocity.x > 0)
+                {
+                    plrHead = 1;
+                    anim.SetBool("Run", true);
+                    sr.flipX = false;
+                }
+                if (rb.velocity.x < 0)
+                {
+                    plrHead = -1;
+                    anim.SetBool("Run", true);
+                    sr.flipX = true;
+                }
             }
 
-            if (Physics2D.Raycast(transform.position, Vector2.left, 2, monsterLayer)&& !isPlayerWatchingRight)
+            if (Physics2D.Raycast(transform.position, Vector2.down, 1.5f, isGround) && Input.GetKeyDown(KeyCode.Space))
             {
-                Debug.DrawRay(transform.position, Vector2.left * 2, Color.red);
+                rb.velocity += Vector2.up * jumpForce;
+
+            }
+            if (Input.GetButtonUp("Horizontal"))
+            {
+                anim.SetBool("Sliding", true);
+            }
+            if (rb.velocity.x == 0)
+            {
+                anim.SetBool("Run", false);
+                anim.SetBool("Sliding", false);
             }
         }
+    }
 
-        // 플레이어 시점 변환
-
-        if (Input.GetAxis("Horizontal") > 0)
-            // 축이 양수 일때 (오른쪽을 바라보고 있을때)
+    IEnumerator AtackTimer()
+    {
+        anim.SetBool("Attack", true);
+        yield return new WaitForSeconds(0.1f);
+        float AtkSpeed = anim.GetCurrentAnimatorStateInfo(0).length;
+        yield return new WaitForSeconds(AtkSpeed / 2);
+        RaycastHit2D rayHitOBJ = Physics2D.Raycast(transform.position, Vector2.right * plrHead, 2, monsterLayer);
+        if (rayHitOBJ.collider != null)
         {
-            isPlayerWatchingRight = true;
-            IMG.flipX = false;
+            Debug.Log(rayHitOBJ.collider.name);
+            rayHitOBJ.collider.GetComponent<Monster>().HP -= 10;
         }
-
-        if (Input.GetAxis("Horizontal") < 0)
-            // 축이 음수일때 (왼쪽을 바라보고 있을때)
+        yield return new WaitForSeconds((AtkSpeed / 2) - 0.2f);
+        if (rayHitOBJ.collider != null)
         {
-            isPlayerWatchingRight = false;
-            IMG.flipX = true;
+            Debug.Log(rayHitOBJ.collider.name);
+           rayHitOBJ.collider.GetComponent<Monster>().HP -= 10;
         }
-
-        // 플레이어가 걷는 중인가?
-        // Mathf.Abs = 절댓값
-
-        anim.SetFloat("walkingSpeed", Mathf.Abs(Input.GetAxis("Horizontal")));
-
-        if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0)
-        {
-            anim.SetBool("walkingStart", true);
-        }
-        else
-        {
-            anim.SetBool("walkingStart", false);
-        }
+        yield return new WaitForSeconds(0.2f);
+        anim.SetBool("Attack", false);
+        attackAble = true;
     }
 }
