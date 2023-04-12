@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public static Player instance; 
     private Rigidbody2D rb;
     private SpriteRenderer sr;
     private Animator anim;
@@ -20,6 +21,27 @@ public class Player : MonoBehaviour
 
     public LayerMask isGround;
     public LayerMask monsterLayer;
+
+    public int _hp;
+
+    public int hp
+    {
+        get
+        {
+            return _hp;
+        }
+        set
+        {
+            if (value < 0)
+                value = 0;
+
+            _hpBar.value = (float)value / _hpMax;
+            _hp = value;
+        }
+    }
+    [SerializeField] private Slider _hpBar;
+    [SerializeField] private int _hpMax;
+
 
 
 
