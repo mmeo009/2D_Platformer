@@ -22,9 +22,11 @@ public class Player : MonoBehaviour
     public LayerMask isGround;
     public LayerMask monsterLayer;
 
+
+    //태현작품
     public int _hp;
 
-    public int hp
+    public int Hp
     {
         get
         {
@@ -41,6 +43,7 @@ public class Player : MonoBehaviour
     }
     [SerializeField] private Slider _hpBar;
     [SerializeField] private int _hpMax;
+    //태현작품
 
 
 
@@ -111,8 +114,10 @@ public class Player : MonoBehaviour
         anim.SetBool("Attack", true);
         yield return new WaitForSeconds(0.1f);
         float AtkSpeed = anim.GetCurrentAnimatorStateInfo(0).length;
+
         yield return new WaitForSeconds(AtkSpeed / 2);
         RaycastHit2D rayHitOBJ = Physics2D.Raycast(transform.position, Vector2.right * plrHead, 2, monsterLayer);
+
         if (rayHitOBJ.collider != null)
         {
             Debug.Log(rayHitOBJ.collider.name);
@@ -124,6 +129,7 @@ public class Player : MonoBehaviour
             Debug.Log(rayHitOBJ.collider.name);
            rayHitOBJ.collider.GetComponent<Monster>().HP -= 10;
         }
+
         yield return new WaitForSeconds(0.2f);
         anim.SetBool("Attack", false);
         attackAble = true;
