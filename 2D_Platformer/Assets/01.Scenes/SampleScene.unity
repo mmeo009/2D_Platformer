@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 28003886}
   - component: {fileID: 28003885}
   - component: {fileID: 28003890}
+  - component: {fileID: 28003891}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -151,7 +152,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 28003884}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: babe3ab1b75755144b6b9b711ddd2149, type: 3}
   m_Name: 
@@ -204,18 +205,18 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: -0.35469913, y: -0.21281958}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.5, y: 2.75}
+    oldSize: {x: 3.45, y: 2.2}
     newSize: {x: 2.3333333, y: 2.3333333}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1.5, y: 2.75}
+  m_Size: {x: 0.91671693, y: 1.6622558}
   m_EdgeRadius: 0
 --- !u!212 &28003888
 SpriteRenderer:
@@ -294,7 +295,7 @@ Animator:
   m_GameObject: {fileID: 28003884}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 312496b25d842af4a938e96c7d5aaee0, type: 2}
+  m_Controller: {fileID: 9100000, guid: 82baec0eeda06194cb6111d9097170f0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -305,6 +306,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &28003891
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 28003884}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2b149345d1f63fd478462fdbaafcf431, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  anim: {fileID: 28003890}
+  Ground:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!1 &354162395
 GameObject:
   m_ObjectHideFlags: 0
